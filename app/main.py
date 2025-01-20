@@ -1,28 +1,36 @@
-# Створюємо базовий клас Animal
 class Animal:
-    # Статичний атрибут для зберігання всіх живих тварин.
-    alive = []
+    alive = []  # Глобальний список живих тварин для всіх екземплярів.
 
-    def __init__(self, name: str, health: int = 100) -> None:
-        """
-        Ініціалізуємо об'єкт тварини.
-        :param name: Ім'я тварини.
-        """
-        self.name = name  # Ім'я тварини.
-        # Здоров'я за замовчуванням дорівнює 100.
-        self.health = health
-        # Атрибут "hidden" за замовчуванням дорівнює False.
+    def __init__(self, name: str):
+        self.name = name
+        self.health = 100
         self.hidden = False
-        # Додаємо тварину до списку "alive".
-        Animal.alive.append(self)
+        Animal.alive.append(self)  # Додаємо тварину до списку живих.
 
-    def __repr__(self) -> str:
+    def check_death(self):
+        if self.health <= 0:
+            print(f"{self.name} has died.")
+            self.remove_from_alive()
+
+    @classmethod
+    def remove_from_alive(cls, instance):
         """
-        Магічний метод для відображення списку живих тварин.
+        Видаляє екземпляр тварини зі списку живих.
+        :param instance: Екземпляр тварини для видалення.
         """
-        return (f"{{Name: {self.name}, "
-                f"Health: {self.health}, "
-                f"Hidden: {self.hidden}}}")
+        if instance in cls.alive:
+            cls.alive.remove(instance)
+
+    @classmethod
+    def show_alive(cls):
+        """
+        Повертає список живих тварин у форматованому вигляді.
+        """
+        return [f"{animal.name} (Health: {animal.health}, Hidden: {animal.hidden})" for animal in cls.alive]
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}(Name: {self.name}, Health: {self.health}, Hidden: {self.hidden})"
+
 
     def check_death(self) -> None:
         """
