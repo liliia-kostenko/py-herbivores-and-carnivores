@@ -1,36 +1,28 @@
+# Створюємо базовий клас Animal
 class Animal:
-    alive = []  # Глобальний список живих тварин для всіх екземплярів.
+    # Статичний атрибут для зберігання всіх живих тварин.
+    alive = []
 
-    def __init__(self, name: str):
-        self.name = name
-        self.health = 100
+    def __init__(self, name: str, health: int = 100) -> None:
+        """
+        Ініціалізуємо об'єкт тварини.
+        :param name: Ім'я тварини.
+        """
+        self.name = name  # Ім'я тварини.
+        # Здоров'я за замовчуванням дорівнює 100.
+        self.health = health
+        # Атрибут "hidden" за замовчуванням дорівнює False.
         self.hidden = False
-        Animal.alive.append(self)  # Додаємо тварину до списку живих.
+        # Додаємо тварину до списку "alive".
+        Animal.alive.append(self)
 
-    def check_death(self):
-        if self.health <= 0:
-            print(f"{self.name} has died.")
-            self.remove_from_alive()
-
-    @classmethod
-    def remove_from_alive(cls, instance):
+    def __repr__(self) -> str:
         """
-        Видаляє екземпляр тварини зі списку живих.
-        :param instance: Екземпляр тварини для видалення.
+        Магічний метод для відображення списку живих тварин.
         """
-        if instance in cls.alive:
-            cls.alive.remove(instance)
-
-    @classmethod
-    def show_alive(cls):
-        """
-        Повертає список живих тварин у форматованому вигляді.
-        """
-        return [f"{animal.name} (Health: {animal.health}, Hidden: {animal.hidden})" for animal in cls.alive]
-
-    def __repr__(self):
-        return f"{self.__class__.__name__}(Name: {self.name}, Health: {self.health}, Hidden: {self.hidden})"
-
+        return (f"{{Name: {self.name}, "
+                f"Health: {self.health}, "
+                f"Hidden: {self.hidden}}}")
 
     def check_death(self) -> None:
         """
@@ -53,7 +45,7 @@ class Herbivore(Animal):
 
 # Створюємо клас Carnivore, який наслідується від Animal.
 class Carnivore(Animal):
-    def bite(self, herbivore: Animal) -> None:
+    def bite(self, herbivore: Herbivore) -> None:
         """
         Метод "bite" дозволяє хижакові нападати на травоїдну тварину.
         :param herbivore: Об'єкт травоїдної тварини, на яку нападає хижак.
